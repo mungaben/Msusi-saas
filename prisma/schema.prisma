@@ -1,80 +1,192 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-}
-
-enum UserRole {
-  ADMIN
-  USER
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
-  id                String   @id @default(cuid())
-  userId            String
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?  @db.Text
-  access_token      String?  @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.Text
+  id_token          String?
   session_state     String?
-  createdAt         DateTime @default(now()) @map(name: "created_at")
-  updatedAt         DateTime @default(now()) @map(name: "updated_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
-  @@map(name: "accounts")
+  @@map("accounts")
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-  @@map(name: "sessions")
+  @@map("sessions")
+}
+
+enum UserRole {
+  ADMIN          // Salon Manager
+  SALONIST       // Employee
+  CUSTOMER       // End user
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum SalonistStatus {
+  AVAILABLE
+  BUSY
+  OFF_DUTY
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
-  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  role          UserRole  @default(CUSTOMER)
+  
+  // Payment related fields
+  stripeCustomerId       String?   @unique @map("stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map("stripe_subscription_id")
+  stripePriceId          String?   @map("stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end")
+  
+  // Relations
+  accounts       Account[]
+  sessions       Session[]
+  salonistProfile Salonist?       // If user is a salonist
+  customerProfile Customer?       // If user is a customer
+  bookingsAsSalonist Booking[]    @relation("SalonistBookings")
+  bookingsAsCustomer Booking[]    @relation("CustomerBookings")
 
-  accounts Account[]
-  sessions Session[]
-
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map(name: "verification_tokens")
+  @@map("verification_tokens")
+}
+
+
+model Salonist {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId @unique
+  bio           String?
+  experience    Int       // Years of experience
+  specialties   String[]  // Array of service types they can provide
+  rating        Float     @default(0)
+  status        SalonistStatus @default(AVAILABLE)
+  location      Location?
+  hourlyRate    Float
+  availability  WorkingHours[]
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("salonists")
+}
+
+model Customer {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId @unique
+  addresses     Address[]
+  preferences   String[]  // Preferred services, salonists, etc.
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("customers")
+}
+
+model Service {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  duration    Int       // in minutes
+  price       Float
+  category    String
+  bookings    Booking[]
+
+  @@map("services")
+}
+
+model Booking {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  customerId  String    @db.ObjectId
+  salonistId  String    @db.ObjectId
+  serviceId   String    @db.ObjectId
+  status      BookingStatus @default(PENDING)
+  dateTime    DateTime
+  location    Address
+  notes       String?
+  price       Float
+  
+  customer    User      @relation("CustomerBookings", fields: [customerId], references: [id])
+  salonist    User      @relation("SalonistBookings", fields: [salonistId], references: [id])
+  service     Service   @relation(fields: [serviceId], references: [id])
+  review      Review?
+
+  @@map("bookings")
+}
+
+model Review {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId   String    @db.ObjectId @unique
+  rating      Float
+  comment     String?
+  createdAt   DateTime  @default(now())
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+
+  @@map("reviews")
+}
+
+model WorkingHours {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  salonistId  String    @db.ObjectId
+  dayOfWeek   Int       // 0-6 (Sunday-Saturday)
+  startTime   String    // Format: "HH:mm"
+  endTime     String    // Format: "HH:mm"
+  salonist    Salonist  @relation(fields: [salonistId], references: [id])
+
+  @@map("working_hours")
+}
+
+type Address {
+  street      String
+  city        String
+  state       String
+  postalCode  String
+  country     String
+  coordinates Location?
+}
+
+type Location {
+  type        String    @default("Point")
+  coordinates Float[]   // [longitude, latitude]
 }
