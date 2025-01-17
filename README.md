@@ -1,129 +1,195 @@
-<a href="https://next-saas-stripe-starter.vercel.app">
-  <img alt="SaaS Starter" src="public/_static/og.jpg">
-  <h1 align="center">Next SaaS Stripe Starter</h1>
-</a>
+# 💈 Msusi - Salon & Barber Booking Platform
 
-<p align="center">
-  Start at full speed with SaaS Starter !
-</p>
+<div align="center">
+  <h3>Connect with Your Perfect Stylist, Anywhere, Anytime</h3>
+</div>
 
-<p align="center">
-  <a href="https://twitter.com/miickasmt">
-    <img src="https://img.shields.io/twitter/follow/miickasmt?style=flat&label=miickasmt&logo=twitter&color=0bf&logoColor=fff" alt="Mickasmt Twitter follower count" />
-  </a>
-</p>
+## 📱 Overview
 
-<p align="center">
-  <a href="#introduction"><strong>Introduction</strong></a> ·
-  <a href="#installation"><strong>Installation</strong></a> ·
-  <a href="#tech-stack--features"><strong>Tech Stack + Features</strong></a> ·
-  <a href="#author"><strong>Author</strong></a> ·
-  <a href="#credits"><strong>Credits</strong></a>
-</p>
-<br/>
+Msusi is a multi-vendor SaaS platform connecting customers with salon professionals and barbers. The platform streamlines the booking process, handles payments via MPESA, and provides a comprehensive management system for both service providers and clients.
 
-## Introduction
+## 🎯 Core Features Roadmap
 
-Empower your next project with the stack of Next.js 14, Prisma, Neon, Auth.js v5, Resend, React Email, Shadcn/ui, and Stripe.
-<br/>
-All seamlessly integrated with the SaaS Starter to accelerate your development and saas journey.
+### 📍 Phase 1: Authentication & User Management
+- [ ] Multi-role authentication (Customers, Salonists, Barbers, Admins)
+- [ ] Social authentication integration
+- [ ] Profile management
+- [ ] Role-based access control
+- [ ] Email verification
+- [ ] Password recovery
 
-## Installation
+### 💈 Phase 2: Service Provider Features
+- [ ] Salon/Barber profile creation
+- [ ] Service listing and management
+- [ ] Availability calendar
+- [ ] Booking management
+- [ ] Portfolio showcase
+- [ ] Reviews and ratings system
+- [ ] Analytics dashboard
 
-Clone & create this repo locally with the following command:
+### 👥 Phase 3: Customer Features
+- [ ] Search and filter salons/barbers
+- [ ] Booking system
+- [ ] Favorite stylists
+- [ ] Review and rating submission
+- [ ] Booking history
+- [ ] Notification system
 
+### 💰 Phase 4: Payment Integration
+- [ ] MPESA integration
+- [ ] Payment processing
+- [ ] Transaction history
+- [ ] Refund handling
+- [ ] Commission management
+- [ ] Financial reporting
+
+### 👨‍💼 Phase 5: Admin Dashboard
+- [ ] User management
+- [ ] Service provider verification
+- [ ] Commission management
+- [ ] Analytics and reporting
+- [ ] Content management
+- [ ] Support ticket system
+
+### 📱 Phase 6: Mobile Responsiveness
+- [ ] Progressive Web App (PWA)
+- [ ] Responsive design for all devices
+- [ ] Mobile-first approach
+- [ ] Offline capabilities
+
+## 🛠️ Technical Stack
+
+### Frontend
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Shadcn/ui
+- React Query
+- Zustand (State Management)
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Redis (Caching)
+- Socket.io (Real-time features)
+
+### Authentication & Security
+- NextAuth.js
+- JWT
+- Role-based access control
+- API rate limiting
+
+### Payment
+- MPESA API integration
+- Payment webhook handling
+- Transaction management
+
+### Cloud Services
+- AWS/Digital Ocean
+- CloudFront (CDN)
+- S3 (File storage)
+- SES (Email)
+
+## 📦 Installation
+
+1. Clone the repository:
 ```bash
-npx create-next-app my-saas-project --example "https://github.com/mickasmt/next-saas-stripe-starter"
+git clone https://github.com/yourusername/msusi-saas.git
 ```
 
-Or, deploy with Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmickasmt%2Fnext-saas-stripe-starter)
-
-### Steps
-
-1. Install dependencies using pnpm:
-
-```sh
-pnpm install
+2. Install dependencies:
+```bash
+cd msusi-saas
+npm install
 ```
 
-2. Copy `.env.example` to `.env.local` and update the variables.
-
-```sh
+3. Set up environment variables:
+```bash
 cp .env.example .env.local
 ```
 
-3. Start the development server:
-
-```sh
-pnpm run dev
+4. Run the development server:
+```bash
+npm run dev
 ```
 
-> [!NOTE]  
-> I use [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) package for update this project.
->
-> Use this command for update your project: `ncu -i --format group`
+## 🗄️ Database Schema (Initial)
 
-## Roadmap
-- [ ] Upgrade eslint to v9
-- [ ] Add resend for success subscriptions
+### Users
+- Basic Info (name, email, phone)
+- Role (customer, salonist, barber, admin)
+- Authentication details
+- Profile information
 
-## Tech Stack + Features
+### Service Providers
+- Business information
+- Services offered
+- Location data
+- Working hours
+- Portfolio
+- Ratings and reviews
 
-https://github.com/mickasmt/next-saas-stripe-starter/assets/62285783/828a4e0f-30e3-4cfe-96ff-4dfd9cd55124
+### Bookings
+- Customer details
+- Service provider details
+- Service details
+- Date and time
+- Status
+- Payment information
 
-### Frameworks
+### Payments
+- Transaction ID
+- Booking reference
+- Amount
+- Status
+- Payment method
+- Commission details
 
-- [Next.js](https://nextjs.org/) – React framework for building performant apps with the best developer experience
-- [Auth.js](https://authjs.dev/) – Handle user authentication with ease with providers like Google, Twitter, GitHub, etc.
-- [Prisma](https://www.prisma.io/) – Typescript-first ORM for Node.js
-- [React Email](https://react.email/) – Versatile email framework for efficient and flexible email development
+## 🔐 API Structure
 
-### Platforms
+### Authentication
+- `/api/auth/*` - Authentication endpoints
+- `/api/users/*` - User management
 
-- [Vercel](https://vercel.com/) – Easily preview & deploy changes with git
-- [Resend](https://resend.com/) – A powerful email framework for streamlined email development
-- [Neon](https://neon.tech/) – Serverless Postgres with autoscaling, branching, bottomless storage and generous free tier.
+### Service Providers
+- `/api/providers/*` - Provider management
+- `/api/services/*` - Service management
 
-### UI
+### Bookings
+- `/api/bookings/*` - Booking management
+- `/api/availability/*` - Availability management
 
-- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for rapid UI development
-- [Shadcn/ui](https://ui.shadcn.com/) – Re-usable components built using Radix UI and Tailwind CSS
-- [Framer Motion](https://framer.com/motion) – Motion library for React to animate components with ease
-- [Lucide](https://lucide.dev/) – Beautifully simple, pixel-perfect icons
-- [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) – Optimize custom fonts and remove external network requests for improved performance
-- [`ImageResponse`](https://nextjs.org/docs/app/api-reference/functions/image-response) – Generate dynamic Open Graph images at the edge
+### Payments
+- `/api/payments/*` - Payment processing
+- `/api/transactions/*` - Transaction management
 
-### Hooks and Utilities
+## 📱 Mobile Considerations
+- Progressive Web App capabilities
+- Responsive design
+- Offline functionality
+- Push notifications
+- Location services
 
-- `useIntersectionObserver` – React hook to observe when an element enters or leaves the viewport
-- `useLocalStorage` – Persist data in the browser's local storage
-- `useScroll` – React hook to observe scroll position ([example](https://github.com/mickasmt/precedent/blob/main/components/layout/navbar.tsx#L12))
-- `nFormatter` – Format numbers with suffixes like `1.2k` or `1.2M`
-- `capitalize` – Capitalize the first letter of a string
-- `truncate` – Truncate a string to a specified length
-- [`use-debounce`](https://www.npmjs.com/package/use-debounce) – Debounce a function call / state update
+## 🔒 Security Considerations
+- Data encryption
+- Secure payment processing
+- Input validation
+- XSS protection
+- CSRF protection
+- Rate limiting
 
-### Code Quality
+## 🚀 Deployment
 
-- [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
-- [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
-- [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+The application will be deployed using a modern cloud infrastructure:
 
-### Miscellaneous
+1. Frontend: Vercel/Netlify
+2. Backend: AWS/Digital Ocean
+3. Database: MongoDB Atlas
+4. Cache: Redis Cloud
+5. Storage: AWS S3
+6. CDN: CloudFront
 
-- [Vercel Analytics](https://vercel.com/analytics) – Track unique visitors, pageviews, and more in a privacy-friendly way
+## 📄 License
 
-## Author
-
-Created by [@miickasmt](https://twitter.com/miickasmt) in 2023, released under the [MIT license](https://github.com/shadcn/taxonomy/blob/main/LICENSE.md).
-
-## Credits
-
-This project was inspired by shadcn's [Taxonomy](https://github.com/shadcn-ui/taxonomy), Steven Tey’s [Precedent](https://github.com/steven-tey/precedent), and Antonio Erdeljac's [Next 13 AI SaaS](https://github.com/AntonioErdeljac/next13-ai-saas).
-
-- Shadcn ([@shadcn](https://twitter.com/shadcn))
-- Steven Tey ([@steventey](https://twitter.com/steventey))
-- Antonio Erdeljac ([@YTCodeAntonio](https://twitter.com/AntonioErdeljac))
-# Msusi-saas
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
