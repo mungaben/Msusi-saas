@@ -5,10 +5,13 @@ import { constructMetadata } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/header";
 import InfoCard from "@/components/dashboard/info-card";
 import TransactionsList from "@/components/dashboard/transactions-list";
+import SalesMade from "@/components/dashboard/SalesMade";
+import NewAgents from "@/components/dashboard/NewAgents";
+import ProfitMade from "@/components/dashboard/ProfitMade";
 
 export const metadata = constructMetadata({
-  title: "Admin – SaaS Starter",
-  description: "Admin page for only admin management.",
+  title: "Admin – Msusi SaaS",
+  description: "Admin panel for Msusi SaaS",
 });
 
 export default async function AdminPage() {
@@ -24,9 +27,9 @@ export default async function AdminPage() {
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <InfoCard />
-          <InfoCard />
-          <InfoCard />
-          <InfoCard />
+          <ProfitMade/>
+          <NewAgents />
+          <SalesMade />
         </div>
         <TransactionsList />
         <TransactionsList />
